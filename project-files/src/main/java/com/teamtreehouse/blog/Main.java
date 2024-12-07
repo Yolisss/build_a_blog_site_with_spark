@@ -1,5 +1,6 @@
 package com.teamtreehouse.blog;
 
+import com.teamtreehouse.blog.dao.BlogDao;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
@@ -14,6 +15,7 @@ public class Main {
     public static void main(String[] args){
         //access static files css, js, img
         staticFileLocation("/public");
+
 
         get("/", (req, res) ->{
             //create a model to pass data to the template
