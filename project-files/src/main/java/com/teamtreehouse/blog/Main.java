@@ -23,24 +23,16 @@ public class Main {
 
         BlogDao dao = new SimpleBlogDao();
 
+        BlogEntry entry1 = new BlogEntry("The best day I've ever had", "This is the content for the best day blog.", "01-01-2024");
+        dao.addEntry(entry1);
+
+
         //the (req, res) -> {} is known as lambda function
         get("/", (req, res) ->{
             //create a model to pass data to the template
-           Map<String, Object> model = new HashMap<>();
-
-          List<Map<String, String>> entries = new ArrayList<>();
-
-            // Create each blog entry as a map with title, content, and slug
-            Map<String, String> entry1 = new HashMap<>();
-            entry1.put("title", "The best day I've ever had");
-            entry1.put("content", "This is the content for the best day blog.");
-            entry1.put("slug", "best-day");
-
-            entries.add(entry1);
-
-            model.put("entries", entries);
-
-           //model's info will be passed into index.hbs
+            Map<String, Object> model = new HashMap<>();
+            model.put("entries", dao.findAllEntries());
+            //model's info will be passed into index.hbs
             //connects model with index.hbs
             return new ModelAndView(model, "index.hbs");
             //renders the template with the provided data

@@ -13,6 +13,8 @@ public class SimpleBlogDao implements BlogDao {
         blogs = new ArrayList<>();
     };
 
+
+
     @Override
     public boolean addEntry(BlogEntry blogEntry) {
         boolean isDuplicate = blogs.stream()
@@ -31,16 +33,10 @@ public class SimpleBlogDao implements BlogDao {
 
     @Override
     public BlogEntry findEntryBySlug(String slug) {
-        BlogEntry entry =  blogs.stream()
+        // Use stream to find the entry or throw an exception if not found
+        return blogs.stream()
                 .filter(blog -> blog.getSlug().equals(slug))
                 .findFirst()
-                .orElseThrow(null);
-        if (entry == null) {
-            // Throwing the NotFoundException with a custom message
-            throw new NotFoundException();
-        }
-
-        return entry;
+                .orElseThrow(NotFoundException::new);
     }
-
 }
