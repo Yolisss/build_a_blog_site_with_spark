@@ -1,12 +1,14 @@
 package com.teamtreehouse.blog.model;
 
+import java.time.LocalDate;
+
 //REP THE STRUCTURE OF THE DATA YOU'RE WORKING WITH
 public class Comment {
     private String author;
     private String content;
-    private String date;
+    private LocalDate date;
 
-    public Comment(String author, String content, String date) {
+    public Comment(String author, String content, LocalDate date) {
         this.author = author;
         this.content = content;
         this.date = date;
@@ -20,7 +22,7 @@ public class Comment {
         return content;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -28,7 +30,7 @@ public class Comment {
         this.content = newContent;
     }
 
-    public void setDate(String newDate) {
+    public void setDate(LocalDate newDate) {
         this.date = newDate;
     }
 }

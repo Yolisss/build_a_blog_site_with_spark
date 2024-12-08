@@ -2,10 +2,12 @@
     <section>
         <div class="container">
             <div class="entry-list">
+                <!--                //array of strs, iterates through each item-->
                 {{#each entries}}
                     <article>
-                        <h2><a href="detail.html">{{ this }}</a></h2>
-                        <time datetime="2024-10-01 1:00">October 1, 2024 at 1:00</time>
+                        <h2><a href="/detail/{{slug}}">{{ title }}</a></h2>
+                        <p>{{content}}</p>
+                        <!--                        <time datetime="2024-10-01 1:00">October 1, 2024 at 1:00</time>-->
                     </article>
                 {{/each}}
 
@@ -13,5 +15,6 @@
         </div>
     </section>
 {{/partial}}
+
 
 {{> base.hbs }}
