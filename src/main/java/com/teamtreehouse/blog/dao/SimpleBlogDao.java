@@ -28,7 +28,8 @@ public class SimpleBlogDao implements BlogDao {
 
     @Override
     public List<BlogEntry> findAllEntries(){
-      return blogs;
+
+        return new ArrayList<>(blogs);
     };
 
     @Override
