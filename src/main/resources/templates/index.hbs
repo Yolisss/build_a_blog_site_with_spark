@@ -1,0 +1,20 @@
+{{#partial "content"}}
+    <section>
+        <div class="container">
+            <div class="entry-list">
+                <!--                //array of strs, iterates through each item-->
+                {{#each entries}}
+                    <article>
+                        <h2><a href="/detail/{{slug}}">{{ title }}</a></h2>
+                        <p>{{content}}</p>
+                        <time datetime="2024-10-01 1:00">{{date}}</time>
+                    </article>
+                {{/each}}
+
+            </div>
+        </div>
+    </section>
+{{/partial}}
+
+
+{{> base.hbs }}
