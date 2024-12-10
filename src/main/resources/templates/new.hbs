@@ -5,9 +5,11 @@
                 <h2>Publish New Entry</h2>
                 <form action="/new" method="post">
                     <label for="title"> Title</label>
-                    <input type="text" name="title" id="title" value="{{new.title}}"><br>
+                    <input type="text" name="title" id="title" value="{{newEntry.title}}"><br>
                     <label for="entry">Entry</label>
-                    <textarea rows="5" name="entry" id="entry">{{new.entry}}</textarea>
+                    <textarea rows="5" name="content" id="entry">{{newEntry.content}}</textarea>
+                    <label for="entry">Date</label>
+                    <input type="text" name="date" id="date" value="{{newEntry.date}}"><br>
                     <input type="submit" value="Publish Entry" class="button">
                     <a href="#" class="button button-secondary">Cancel</a>
                 </form>

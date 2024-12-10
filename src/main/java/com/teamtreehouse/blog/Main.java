@@ -51,6 +51,17 @@ public class Main {
             return new ModelAndView(model, "new.hbs");
         }, new HandlebarsTemplateEngine());
 
+        post("/new", (req, res) -> {
+            String title = req.queryParams("title"); // Get title from form
+            String content = req.queryParams("content");
+            String date = req.queryParams("date");// Get content from form
+            BlogEntry newEntry = new BlogEntry(title, content, date); // Create new BlogPost object
+            dao.addEntry(newEntry); // Add new post to DAO
+            res.redirect("/"); // Redirect to the page with all blog posts
+            return null;
+        });
+
+
 
         get("/edit/:slug", (req, res) -> {
             String slug = req.params("slug");
