@@ -1,10 +1,12 @@
 package com.teamtreehouse.blog.model;
 
-import java.text.Normalizer;
+import java.io.IOException;
+import com.github.slugify.Slugify;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+//similar to courseIdea.java
 
 //REP THE STRUCTURE OF THE DATA YOU'RE WORKING WITH
 public class BlogEntry {
@@ -19,24 +21,19 @@ public class BlogEntry {
 
     public BlogEntry( String title, String content, String date) {
         this.title = title;
+        try {
+            Slugify slugify = new Slugify();
+            //storing title in slug field for url
+            slug = slugify.slugify(title);
+            System.out.println("Generated slug: " + slug); // Log the slug to verify
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.date = date;
         this.content = content;
         this.entry = entry;
-        this.slug = generateSlug(title);
         comments = new ArrayList<>();
-    }
-
-    // Generate a slug based on the title
-    private String generateSlug(String input) {
-        if (input == null || input.isEmpty()) {
-            return null;
-        }
-        // Normalize the string and replace spaces with hyphens
-        return Normalizer.normalize(input, Normalizer.Form.NFD)
-                .replaceAll("[^\\w\\s-]", "") // Remove special characters
-                .trim()
-                .replaceAll("\\s+", "-") // Replace spaces with hyphens
-                .toLowerCase();
     }
 
     public String getTitle() {

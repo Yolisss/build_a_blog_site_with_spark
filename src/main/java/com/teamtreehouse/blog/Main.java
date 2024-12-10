@@ -23,7 +23,7 @@ public class Main {
 
         BlogDao dao = new SimpleBlogDao();
 
-        BlogEntry entry1 = new BlogEntry("The best day I've ever had", "This is the content for the best day blog.", "01-01-2024");
+        BlogEntry entry1 = new BlogEntry("The best day Ive ever had", "This is the content for the best day blog.", "01-01-2024");
         dao.addEntry(entry1);
 
 
