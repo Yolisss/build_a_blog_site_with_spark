@@ -1,5 +1,6 @@
 package com.teamtreehouse.blog.model;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,21 @@ public class BlogEntry {
         this.date = date;
         this.content = content;
         this.entry = entry;
-        this.slug = slug;
+        this.slug = generateSlug(title);
         comments = new ArrayList<>();
+    }
+
+    // Generate a slug based on the title
+    private String generateSlug(String input) {
+        if (input == null || input.isEmpty()) {
+            return null;
+        }
+        // Normalize the string and replace spaces with hyphens
+        return Normalizer.normalize(input, Normalizer.Form.NFD)
+                .replaceAll("[^\\w\\s-]", "") // Remove special characters
+                .trim()
+                .replaceAll("\\s+", "-") // Replace spaces with hyphens
+                .toLowerCase();
     }
 
     public String getTitle() {
