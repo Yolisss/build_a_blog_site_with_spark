@@ -46,6 +46,11 @@ public class Main {
             return new ModelAndView(model, "detail.hbs");
         }, new HandlebarsTemplateEngine());
 
+        get("/new", (req, res) ->{
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "new.hbs");
+        }, new HandlebarsTemplateEngine());
+
 
         get("/edit/:slug", (req, res) -> {
             String slug = req.params("slug");
@@ -73,11 +78,6 @@ public class Main {
             return null; //nothing to return, we just redirected the user
         });
 
-        get("/new", (req, res) ->{
-            //needs title, date, content
-            Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "new.hbs");
-        }, new HandlebarsTemplateEngine());
 
         //not working due to blogEntry constructor, need clarification on that
 //        post("/new/:slug", (req, res) ->{
