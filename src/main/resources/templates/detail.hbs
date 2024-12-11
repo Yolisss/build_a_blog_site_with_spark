@@ -16,13 +16,15 @@
     <section class="entry-comments">
         <div class="container">
             <h2>Comments</h2>
-            <div class="comment">
-                <strong>{{ detail.title }}</strong>
-                <time datetime="2016-01-31 1:00">{{ detail.date }}</time>
-                {{ detail.entry }}
-            </div>
+            {{#each detail.comments}}
+                <div class="comment">
+                    <strong>{{ this.author }}</strong>
+                    <time datetime="{{this.date}}">{{ this.date }}</time>
+                    {{ this.content }}
+                </div>
+            {{/each}}
             <div class="new-comment">
-                <form>
+                <form action="/detail/{{detail.slug}}" method="post">
                     <label for="name">Name</label>
                     <input type="text" name="name" id="name"><br>
                     <label for="comment">Comment</label>

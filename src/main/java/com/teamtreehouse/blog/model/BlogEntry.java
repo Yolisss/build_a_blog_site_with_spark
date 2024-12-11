@@ -34,6 +34,8 @@ public class BlogEntry {
         System.out.println("Entry from BlogPost: " + entry);
         System.out.println(entry);
         comments = new ArrayList<>();
+        System.out.println("Grabbing list of comments: " + comments);
+
     }
 
     public String getTitle() {
