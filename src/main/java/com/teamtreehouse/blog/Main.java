@@ -60,10 +60,6 @@ public class Main {
             }
         });
 
-
-
-
-
         BlogEntry entry1 = new BlogEntry("The best day Ive ever had", "This is the content for the best day blog.", "01-01-2024");
         dao.addEntry(entry1);
 
@@ -115,7 +111,6 @@ public class Main {
 
         //GRAB EDIT PAGE
         get("/edit/:slug", (req, res) -> {
-
             String slug = req.params("slug");
             System.out.print(slug);
             // Get the blog entry by slug
@@ -128,10 +123,7 @@ public class Main {
             return new ModelAndView(model, "edit.hbs");
         }, new HandlebarsTemplateEngine());
 
-
         //POST BLOG THAT WAS EDITED
-        //RUN ROUTE TO SEE CHANGES MADE
-        //CONFIRM WHETHER CONTENT IS FOR ENTRY
         post("/edit/:slug", (req, res) ->{
             String slug = req.params("slug"); //retrieve slug from url
             String newTitle = req.queryParams("title"); //get updated title
@@ -177,7 +169,6 @@ public class Main {
             return new ModelAndView(model, "password.hbs");
         }, new HandlebarsTemplateEngine());
 
-
         // POST route to handle password submission
         post("/password", (req, res) -> {
             String password = req.queryParams("password");
@@ -200,19 +191,6 @@ public class Main {
             return null;
         });
 
-
-
-
-
-
-//        post("/sign-in", (req, res) -> {
-//            String username = req.queryParams("username"); // Get the username from the form
-//            res.cookie("username", username); // Set the username cookie
-//            res.redirect("/"); // Redirect to the homepage
-//            return null; // Ensure you return null as required by Spark for void responses
-//        });
-
-
         exception(NotFoundException.class, (exc, req, res) ->{
             res.status(404);
             //renders the template with the provided data
@@ -227,7 +205,6 @@ public class Main {
         req.session().attribute(FLASH_MESSAGE_KEY, message);  // Set the flash message in the session
     }
 
-
     //GETTER
     private static String getFlashMessage(Request req) {
         if (req.session(false) == null) {
@@ -236,6 +213,4 @@ public class Main {
         // Return the flash message if it exists
         return req.session().attribute(FLASH_MESSAGE_KEY);
     }
-
-
 }
