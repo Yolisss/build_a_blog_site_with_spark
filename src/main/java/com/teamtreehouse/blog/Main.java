@@ -43,6 +43,9 @@ public class Main {
             System.out.println("Admin cookie: " + req.cookie("admin"));
 
             if(req.attribute("admin") == null){
+
+                req.session().attribute("redirectAfterLogin", req.uri());
+
                 res.redirect("/password");
                 halt();
             }
@@ -112,10 +115,6 @@ public class Main {
 
         //GRAB EDIT PAGE
         get("/edit/:slug", (req, res) -> {
-            if (req.cookie("admin") == null) {  // Check if the admin cookie exists
-                res.redirect("/password");  // Redirect to the password page if not logged in
-                return null;  // Stop further execution of this route
-            }
 
             String slug = req.params("slug");
             System.out.print(slug);
@@ -137,9 +136,6 @@ public class Main {
             String slug = req.params("slug"); //retrieve slug from url
             String newTitle = req.queryParams("title"); //get updated title
             String newEntry = req.queryParams("entry");
-
-
-
 
             BlogEntry blogEntry = dao.findEntryBySlug(slug); // Get the existing blog entry
 
