@@ -12,10 +12,6 @@ public class Comment {
         this.author = author;
         this.content = content;
         this.date = date;
-        System.out.println("Author: " + author);
-        System.out.println("Content: " + content);
-        System.out.println("Date: " + date);
-
     }
 
     public String getAuthor() {

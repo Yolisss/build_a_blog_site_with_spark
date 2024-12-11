@@ -15,7 +15,6 @@ public class SimpleBlogDao implements BlogDao {
         blogs = new ArrayList<>();
     };
 
-
 //add our idea to the list
     @Override
     public boolean addEntry(BlogEntry blogEntry) {
@@ -26,7 +25,6 @@ public class SimpleBlogDao implements BlogDao {
         }
         return blogs.add(blogEntry);
     }
-
 
     //returns a brand new list with the added blogs
     @Override

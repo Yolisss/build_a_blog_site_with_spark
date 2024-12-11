@@ -13,9 +13,9 @@ public class BlogEntry {
 
     //add necessary fields title, content, date
     private String title;
+    private String entry;
     private String date;
     private String slug;
-    private String entry;
     private List<Comment> comments;
 
     public BlogEntry( String title, String entry, String date) {
@@ -24,22 +24,21 @@ public class BlogEntry {
             Slugify slugify = new Slugify();
             //storing title in slug field for url
             slug = slugify.slugify(title);
-            System.out.println("Generated slug: " + slug); // Log the slug to verify
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.date = date;
         this.entry = entry;
-        System.out.println("Entry from BlogPost: " + entry);
-        System.out.println(entry);
+        this.date = date;
         comments = new ArrayList<>();
-        System.out.println("Grabbing list of comments: " + comments);
     }
 
     public String getTitle() {
         return title;
     }
+
+    public String getEntry() {
+        return entry;
+    };
 
     public String getDate() {
         return date;
@@ -49,11 +48,7 @@ public class BlogEntry {
         return slug;
     }
 
-    public String getEntry() {
-        return entry;
-    };
 
-    //retrieves entire list of comments
     public List<Comment> getComments() {
         return comments;
     }
