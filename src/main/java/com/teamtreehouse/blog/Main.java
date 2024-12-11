@@ -224,16 +224,13 @@ public class Main {
 
 
     //GETTER
-    private static String getFlashMessage(Request req){
-        if(req.session(false) == null){
+    private static String getFlashMessage(Request req) {
+        if (req.session(false) == null) {
             return null;
         }
-        //if it already exists
-        if(req.session().attributes().contains(FLASH_MESSAGE_KEY)){
-            return null;
-        }
-        //typecast
+        // Return the flash message if it exists
         return req.session().attribute(FLASH_MESSAGE_KEY);
     }
+
 
 }
