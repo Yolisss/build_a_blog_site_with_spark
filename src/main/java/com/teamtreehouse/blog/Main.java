@@ -6,6 +6,7 @@ import com.teamtreehouse.blog.dao.SimpleBlogDao;
 import com.teamtreehouse.blog.model.BlogEntry;
 import com.teamtreehouse.blog.model.Comment;
 import spark.ModelAndView;
+import spark.Request;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.time.LocalDate;
@@ -19,11 +20,44 @@ import static spark.Spark.*;
 
 
 public class Main {
+    private static final String FLASH_MESSAGE_KEY = "flash_message";
+    private static final String ADMIN_ROLE = "admin"; // Declare a constant
+
     public static void main(String[] args){
         //access static files css, js, img
         staticFileLocation("/public");
 
+
         BlogDao dao = new SimpleBlogDao();
+
+        before((req, res) ->{
+            if(req.cookie("admin") != null){
+                //we're going to add an attribute to the req so the
+                //rest of the req can use it
+                req.attribute("admin", req.cookie("admin"));
+            }
+        });
+
+        before("/edit/:slug", (req, res) -> {
+            // Debugging the cookie to make sure it's being sent correctly
+            System.out.println("Admin cookie: " + req.cookie("admin"));
+
+            if(req.attribute("admin") == null){
+                res.redirect("/password");
+                halt();
+            }
+        });
+
+        before("/new", (req, res) -> {
+            if(req.attribute("admin") == null){
+
+                res.redirect("/password");
+                //stop the req from hitting one of the other routes
+                //nothing more will happen
+                halt();
+            }
+        });
+
 
 
 
@@ -62,6 +96,11 @@ public class Main {
 
         //ADD NEW BLOG
         post("/new", (req, res) -> {
+            if (req.cookie("admin") == null) {  // Check if the admin cookie exists
+                res.redirect("/password");  // Redirect to the password page if not logged in
+                return null;  // Stop further execution of this route
+            }
+
             String title = req.queryParams("title"); // Get title from form
             String entry = req.queryParams("entry");
             String date = req.queryParams("date");// Get content from form
@@ -73,6 +112,11 @@ public class Main {
 
         //GRAB EDIT PAGE
         get("/edit/:slug", (req, res) -> {
+            if (req.cookie("admin") == null) {  // Check if the admin cookie exists
+                res.redirect("/password");  // Redirect to the password page if not logged in
+                return null;  // Stop further execution of this route
+            }
+
             String slug = req.params("slug");
             System.out.print(slug);
             // Get the blog entry by slug
@@ -127,6 +171,42 @@ public class Main {
             return null;
         });
 
+        get("/password", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            String flashMessage = getFlashMessage(req);  // Retrieve the flash message from the session
+            if (flashMessage != null) {
+                model.put("flashMessage", flashMessage);  // Add it to the model if it's present
+                req.session().removeAttribute(FLASH_MESSAGE_KEY);  // Remove it after showing it once
+            }
+            return new ModelAndView(model, "password.hbs");
+        }, new HandlebarsTemplateEngine());
+
+
+        // POST route to handle password submission
+        post("/password", (req, res) -> {
+            String password = req.queryParams("password");
+
+            if (ADMIN_ROLE.equals(password)) {
+                res.cookie("admin", "true");  // Set the admin cookie if the password is correct
+                res.redirect("/new");  // Redirect to the new blog page (or wherever the user tried to go)
+            } else {
+                setFlashMessage(req, "Invalid password, please try again!");  // Set the flash message for invalid password
+                res.redirect("/password");  // Redirect back to the password page
+            }
+            return null;
+        });
+
+
+
+
+
+//        post("/sign-in", (req, res) -> {
+//            String username = req.queryParams("username"); // Get the username from the form
+//            res.cookie("username", username); // Set the username cookie
+//            res.redirect("/"); // Redirect to the homepage
+//            return null; // Ensure you return null as required by Spark for void responses
+//        });
+
 
         exception(NotFoundException.class, (exc, req, res) ->{
             res.status(404);
@@ -136,6 +216,24 @@ public class Main {
                     new ModelAndView(null, "not-found.hbs"));
             res.body(html);
         });
-
     }
+    //SETTER
+    private static void setFlashMessage(Request req, String message) {
+        req.session().attribute(FLASH_MESSAGE_KEY, message);  // Set the flash message in the session
+    }
+
+
+    //GETTER
+    private static String getFlashMessage(Request req){
+        if(req.session(false) == null){
+            return null;
+        }
+        //if it already exists
+        if(req.session().attributes().contains(FLASH_MESSAGE_KEY)){
+            return null;
+        }
+        //typecast
+        return req.session().attribute(FLASH_MESSAGE_KEY);
+    }
+
 }

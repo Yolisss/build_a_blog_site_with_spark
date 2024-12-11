@@ -35,7 +35,6 @@ public class BlogEntry {
         System.out.println(entry);
         comments = new ArrayList<>();
         System.out.println("Grabbing list of comments: " + comments);
-
     }
 
     public String getTitle() {
@@ -46,16 +45,18 @@ public class BlogEntry {
         return date;
     }
 
-
-
     public String getSlug() {
         return slug;
     }
 
-
     public String getEntry() {
         return entry;
     };
+
+    //retrieves entire list of comments
+    public List<Comment> getComments() {
+        return comments;
+    }
 
     //setter methods
     public void setTitle(String title) {
@@ -68,13 +69,14 @@ public class BlogEntry {
         }
     }
 
-
     public void setEntry(String entry) {
         this.entry = entry;
         System.out.println("setEntry called. Updated entry: " + this.entry); // Debug log
     }
+
+
     //implement methods to manage comments
-//add
+    //add
     public void addComment(Comment comment){
         comments.add(comment);
     }
@@ -96,17 +98,4 @@ public class BlogEntry {
             commentToEdit.setDate(newDate);
         }
     };
-
-    //retrieves entire list of comments
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-
-
-
-//    public boolean addComment(Comment comment) {
-//        // Store these comments!
-//        return false;
-//    }
 }
