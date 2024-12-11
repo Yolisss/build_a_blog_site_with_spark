@@ -49,14 +49,14 @@ public class Main {
         });
 
         before("/new", (req, res) -> {
-            if(req.attribute("admin") == null){
-
-                res.redirect("/password");
-                //stop the req from hitting one of the other routes
-                //nothing more will happen
-                halt();
+            if (req.cookie("admin") == null) {
+                // Save the current URL the user was trying to access
+                req.session().attribute("redirectAfterLogin", req.uri());
+                res.redirect("/password");  // Redirect to the password page
+                halt();  // Stop further processing
             }
         });
+
 
 
 
@@ -188,13 +188,22 @@ public class Main {
 
             if (ADMIN_ROLE.equals(password)) {
                 res.cookie("admin", "true");  // Set the admin cookie if the password is correct
-                res.redirect("/new");  // Redirect to the new blog page (or wherever the user tried to go)
+
+                // Retrieve the original page the user tried to access
+                String redirectAfterLogin = req.session().attribute("redirectAfterLogin");
+                if (redirectAfterLogin != null) {
+                    req.session().removeAttribute("redirectAfterLogin");
+                    res.redirect(redirectAfterLogin);  // Redirect to the originally requested page
+                } else {
+                    res.redirect("/new");  // Default to the /new page if no redirect URL is found
+                }
             } else {
                 setFlashMessage(req, "Invalid password, please try again!");  // Set the flash message for invalid password
                 res.redirect("/password");  // Redirect back to the password page
             }
             return null;
         });
+
 
 
 
