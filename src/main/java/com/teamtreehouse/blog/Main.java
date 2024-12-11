@@ -52,6 +52,8 @@ public class Main {
         });
 
         before("/new", (req, res) -> {
+            System.out.println("Admin cookie: " + req.cookie("admin"));
+
             if (req.cookie("admin") == null) {
                 // Save the current URL the user was trying to access
                 req.session().attribute("redirectAfterLogin", req.uri());
@@ -60,9 +62,21 @@ public class Main {
             }
         });
 
-        BlogEntry entry1 = new BlogEntry("The best day Ive ever had", "This is the content for the best day blog.", "01-01-2024");
+        BlogEntry entry1 = new BlogEntry(
+                "The best day Ive ever had",
+                "This is the content for the best day blog.",
+                LocalDate.of(2024, 2, 20));
         dao.addEntry(entry1);
-
+        BlogEntry entry2 = new BlogEntry(
+                "The absolute worst day I’ve ever had",
+                "This is the content for the best day blog.",
+                LocalDate.of(2024, 4, 13));
+        dao.addEntry(entry2);
+        BlogEntry entry3 = new BlogEntry(
+                "That time at the mall",
+                "This is the content for the best day blog.",
+                LocalDate.of(2024, 1, 28));
+        dao.addEntry(entry3);
 
         //INDEX PAGE
         //the (req, res) -> {} is known as lambda function
@@ -87,6 +101,23 @@ public class Main {
             return new ModelAndView(model, "detail.hbs");
         }, new HandlebarsTemplateEngine());
 
+        //POST NEW COMMENT
+        post("/detail/:slug", (req, res) -> {
+            String slug = req.params("slug");
+            String author = req.queryParams("name"); // Get title from form
+            String content = req.queryParams("comment");
+            LocalDate date = LocalDate.now();
+
+            //find blogEntry using slug
+            BlogEntry blogEntry = dao.findEntryBySlug(slug);
+
+            Comment newComment = new Comment(author, content, date); // Create new BlogPost object
+
+            blogEntry.addComment(newComment); // Add new post to DAO
+            res.redirect("/detail/" + slug);
+            return null;
+        });
+
         //GRAB NEW BLOG
         get("/new", (req, res) ->{
             Map<String, Object> model = new HashMap<>();
@@ -102,8 +133,10 @@ public class Main {
 
             String title = req.queryParams("title"); // Get title from form
             String entry = req.queryParams("entry");
-            String date = req.queryParams("date");// Get content from form
-            BlogEntry newEntry = new BlogEntry(title, entry, date); // Create new BlogPost object
+            LocalDate date = LocalDate.now();
+
+            BlogEntry newEntry = new BlogEntry(title, entry, date);
+
             dao.addEntry(newEntry); // Add new post to DAO
             res.redirect("/"); // Redirect to the page with all blog posts
             return null;
@@ -136,27 +169,6 @@ public class Main {
 
             res.redirect("/detail/" + blogEntry.getSlug());
             return null; //nothing to return, we just redirected the user
-        });
-
-        //POST NEW COMMENT
-        post("/detail/:slug", (req, res) -> {
-            String slug = req.params("slug");
-            String author = req.queryParams("name"); // Get title from form
-            String content = req.queryParams("comment");
-            LocalDate date = LocalDate.now();
-
-            System.out.println("Slug from post: " + slug);
-            System.out.println("Name from post: " + author);
-            System.out.println("Content from post: " + content);
-
-            //find blogEntry using slug
-            BlogEntry blogEntry = dao.findEntryBySlug(slug);
-
-            Comment newComment = new Comment(author, content, date); // Create new BlogPost object
-
-            blogEntry.addComment(newComment); // Add new post to DAO
-            res.redirect("/detail/" + slug);
-            return null;
         });
 
         get("/password", (req, res) -> {

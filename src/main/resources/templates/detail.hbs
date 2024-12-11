@@ -4,7 +4,7 @@
             <div class="entry-list single">
                 <article>
                     <h1>{{ detail.title }}</h1>
-                    <time datetime="2016-01-31 1:00">{{ date }}</time>
+                    <time datetime="{{detail.date}}">{{ detail.date }}</time>
                     <div class="entry">
                         {{ detail.entry }}
                         <p><a class="link" href="/edit/{{detail.slug}}">Edit Entry</a></p>

@@ -14,11 +14,11 @@ public class BlogEntry {
     //add necessary fields title, content, date
     private String title;
     private String entry;
-    private String date;
+    private LocalDate date;
     private String slug;
     private List<Comment> comments;
 
-    public BlogEntry( String title, String entry, String date) {
+    public BlogEntry( String title, String entry, LocalDate date) {
         this.title = title;
         try {
             Slugify slugify = new Slugify();
@@ -40,7 +40,7 @@ public class BlogEntry {
         return entry;
     };
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
