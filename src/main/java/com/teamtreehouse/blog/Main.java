@@ -42,7 +42,9 @@ public class Main {
         get("/detail/:slug", (req, res) ->{
             //needs title, date, content
             Map<String, Object> model = new HashMap<>();
+            //fetches blog entry(contains title, entry,date) from dao
             model.put("detail", dao.findEntryBySlug(req.params("slug")));
+            //passed to handlebar template
             return new ModelAndView(model, "detail.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -53,18 +55,18 @@ public class Main {
 
         post("/new", (req, res) -> {
             String title = req.queryParams("title"); // Get title from form
-            String content = req.queryParams("content");
+            String entry = req.queryParams("entry");
             String date = req.queryParams("date");// Get content from form
-            BlogEntry newEntry = new BlogEntry(title, content, date); // Create new BlogPost object
+            BlogEntry newEntry = new BlogEntry(title, entry, date); // Create new BlogPost object
             dao.addEntry(newEntry); // Add new post to DAO
             res.redirect("/"); // Redirect to the page with all blog posts
             return null;
         });
 
 
-
         get("/edit/:slug", (req, res) -> {
             String slug = req.params("slug");
+            System.out.print(slug);
             // Get the blog entry by slug
             BlogEntry blogEntry = dao.findEntryBySlug(slug);
             // Prepare the model to pass to the template
@@ -75,17 +77,26 @@ public class Main {
             return new ModelAndView(model, "edit.hbs");
         }, new HandlebarsTemplateEngine());
 
+
+        //RUN ROUTE TO SEE CHANGES MADE
+        //CONFIRM WHETHER CONTENT IS FOR ENTRY
         post("/edit/:slug", (req, res) ->{
             String slug = req.params("slug"); //retrieve slug from url
             String newTitle = req.queryParams("title"); //get updated title
-            String newContent = req.queryParams("entry");
+            String newEntry = req.queryParams("entry");
+
+            System.out.println("Slug: " + slug);
+            System.out.println("Title: " + newTitle);
+            System.out.println("Entry: " + newEntry);
+
+
 
             BlogEntry blogEntry = dao.findEntryBySlug(slug); // Get the existing blog entry
 
             blogEntry.setTitle(newTitle);
-            blogEntry.setEntry(newContent);
+            blogEntry.setEntry(newEntry);
 
-            res.redirect("/detail/" + slug);
+            res.redirect("/detail/" + blogEntry.getSlug());
             return null; //nothing to return, we just redirected the user
         });
 

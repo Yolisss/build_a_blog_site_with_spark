@@ -14,12 +14,11 @@ public class BlogEntry {
     //add necessary fields title, content, date
     private String title;
     private String date;
-    private String content;
     private String slug;
     private String entry;
     private List<Comment> comments;
 
-    public BlogEntry( String title, String content, String date) {
+    public BlogEntry( String title, String entry, String date) {
         this.title = title;
         try {
             Slugify slugify = new Slugify();
@@ -31,8 +30,9 @@ public class BlogEntry {
             throw new RuntimeException(e);
         }
         this.date = date;
-        this.content = content;
         this.entry = entry;
+        System.out.println("Entry from BlogPost: " + entry);
+        System.out.println(entry);
         comments = new ArrayList<>();
     }
 
@@ -44,9 +44,6 @@ public class BlogEntry {
         return date;
     }
 
-    public String getContent() {
-        return content;
-    }
 
 
     public String getSlug() {
@@ -56,17 +53,24 @@ public class BlogEntry {
 
     public String getEntry() {
         return entry;
-    }
+    };
 
     //setter methods
     public void setTitle(String title) {
         this.title = title;
+        try {
+            Slugify slugify = new Slugify();
+            this.slug = slugify.slugify(title);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     public void setEntry(String entry) {
         this.entry = entry;
+        System.out.println("setEntry called. Updated entry: " + this.entry); // Debug log
     }
-
     //implement methods to manage comments
 //add
     public void addComment(Comment comment){

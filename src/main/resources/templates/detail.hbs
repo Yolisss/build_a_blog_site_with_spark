@@ -6,8 +6,8 @@
                     <h1>{{ detail.title }}</h1>
                     <time datetime="2016-01-31 1:00">{{ date }}</time>
                     <div class="entry">
-                        {{ detail.content }}
-                        <p><a class="link" href="edit.html">Edit Entry</a></p>
+                        {{ detail.entry }}
+                        <p><a class="link" href="/edit/{{detail.slug}}">Edit Entry</a></p>
                     </div>
                 </article>
             </div>
@@ -19,7 +19,7 @@
             <div class="comment">
                 <strong>{{ detail.title }}</strong>
                 <time datetime="2016-01-31 1:00">{{ detail.date }}</time>
-                {{ detail.content }}
+                {{ detail.entry }}
             </div>
             <div class="new-comment">
                 <form>
